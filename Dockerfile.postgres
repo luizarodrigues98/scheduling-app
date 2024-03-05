@@ -1,0 +1,6 @@
+FROM postgres:12.13-alpine
+
+COPY postgres-docker-user.sql .
+
+# Preload database on init
+RUN [[ -e "postgres-docker-user.sql" ]] && cp postgres-docker-user.sql /docker-entrypoint-initdb.d/

@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.postgres
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    user: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+    networks:
+      - scheduling-net
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+      - bundle_path:/bundle
+    ports:
+      - '3000:3000'
+      - '9394:9394'
+    networks:
+      - scheduling-net
+    tty: true
+    stdin_open: true
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    environment:
+      - GF_SERVER_HTTP_PORT=3001
+    ports:
+      - '3001:3001'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - scheduling-net
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+    networks:
+      - scheduling-net
+    ports:
+      - 9090:9090
+
+volumes:
+  postgres_data: {}
+  grafana-storage: {}
+  bundle_path:
+
+networks:
+  scheduling-net:
+    driver: bridge

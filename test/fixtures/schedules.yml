@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  date: 2024-03-04
+  local: MyString
+  time: 2024-03-04 18:51:01
+
+two:
+  name: MyString
+  date: 2024-03-04
+  local: MyString
+  time: 2024-03-04 18:51:01
