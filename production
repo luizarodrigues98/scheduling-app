@@ -1,0 +1,24 @@
+#!/bin/bash
+
+docker network create myapp || true
+
+docker run \
+        -rm\
+        -e POSTGRES_PASSWORD=postgres \
+        --name postgres-prod \
+        -network myapp\
+        --hostname postgres\
+        -d\
+        postgres\
+
+docker build -t myapp-prod\
+        --target production \
+.
+
+docker run \
+        -rm\
+        -p 3001:3000\
+        --name myapp-prod\
+        --network myapp\
+        -d\
+        myapp-prod

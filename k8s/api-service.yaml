@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Services
+metadata:
+  name: schedulling-api
+spec:
+  selector:
+    app: schedulling-api
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---

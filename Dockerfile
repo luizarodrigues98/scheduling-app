@@ -1,15 +1,15 @@
-FROM ruby:3.2-bullseye
+FROM ruby:3.2-bullseye AS base
 RUN apt update -qq && apt install -y build-essential apt-utils libpq-dev nodejs
-
 WORKDIR /app
 RUN gem install bundler
-COPY Gemfile* ./
+
+FROM base AS dev
+
+FROM base AS production
+COPY Gemfile .
+COPY Gemfile.lock .
 RUN bundle install
-
-ADD . /app
-
-ARG DEFAULT_PORT 3000
-
-EXPOSE ${DEFAULT_PORT}
-
-CMD [ "bundle","exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+COPY . .
+EXPOSE 3000
+ENTRYPOINT [ "./entrypoint.sh" ]
+CMD [ "rackup" , "-o", "0.0.0.0", "-p", "3000"]

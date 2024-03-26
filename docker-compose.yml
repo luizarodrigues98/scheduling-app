@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: ./Dockerfile.postgres
     environment:
-      - POSTGRES_HOST_AUTH_METHOD=trust
-    user: postgres
+      - POSTGRES_PASSWORD=postgres
+    hostname: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -16,7 +16,10 @@ services:
       - scheduling-net
 
   web:
-    build: .
+    container_name: 'myapp-dev'
+    build:
+      context: .
+      target: dev
     volumes:
       - .:/app
       - bundle_path:/bundle
@@ -49,6 +52,18 @@ services:
       - scheduling-net
     ports:
       - 9090:9090
+
+  nginx:
+      image: nginx:latest
+      container_name: nginx
+      volumes:
+        - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      depends_on:
+        - web
+      ports:
+        - "3002:3002"
+      networks:
+        - scheduling-net
 
 volumes:
   postgres_data: {}

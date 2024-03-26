@@ -10,7 +10,6 @@ module Scheduling
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-    config.web_console.permissions = '10.0.2.2'
 
     config.generators do |generate|
 
