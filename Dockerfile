@@ -12,4 +12,4 @@ RUN bundle install
 COPY . .
 EXPOSE 3000
 ENTRYPOINT [ "./entrypoint.sh" ]
-CMD [ "rackup" , "-o", "0.0.0.0", "-p", "3000"]
+CMD [ "rails" ,"s", "-b", "0.0.0.0", "-p", "3000"]
